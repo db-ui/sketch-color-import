@@ -8,10 +8,21 @@ const alphaToHex = (alpha) => {
   return hexAlpha.padStart(2, "0");
 };
 
+const capitalizeState = (state) => {
+  if (state) {
+    const parts = state.split("-");
+    if (parts.length > 1) {
+      parts[1] = capitalize(parts[1]);
+    }
+    return parts.join("--");
+  }
+  return "";
+};
 const expandHexColor = (hexColor) => {
   if (hexColor.length === 4 && hexColor[0] === "#") {
     const isShortHex = hexColor === "#fff" || hexColor === "#000";
     if (isShortHex) {
+      console.log(hexColor);
       return (
         hexColor[0] +
         hexColor[1].repeat(2) +
@@ -22,17 +33,6 @@ const expandHexColor = (hexColor) => {
   }
   return hexColor;
 };
-
-const capitalizeState = (state) => {
-  if (state) {
-    const parts = state.split("-");
-    if (parts.length > 1) {
-      parts[1] = capitalize(parts[1]);
-    }
-    return parts.join("-");
-  }
-  return "";
-};
 const prefixOrder = {
   brand: 1,
   neutral: 2,
@@ -42,10 +42,10 @@ const prefixOrder = {
   warning: 6,
 };
 
-const createSwatch = (document, name, hexColor, alpha) => {
-  const expandedHexColor = expandHexColor(hexColor);
+const createSwatch = (document, name, hexColor, alpha) => {  
 
-  const hexWithAlpha = expandedHexColor + alphaToHex(alpha);
+  const expandedHex = expandHexColor(hexColor);
+  const hexWithAlpha = expandedHex + alphaToHex(alpha);
   const Swatch = sketch.Swatch;
 
   let swatch = document.swatches.find((s) => s.name === name);
@@ -109,7 +109,7 @@ const generateColorName = (theme, colorName) => {
       state = parts[2];
     }
     if (color === "bg-weak") {
-      return `${capitalizedTheme}/On/${c}/Background/Weak/${state}`;
+      return `${capitalizedTheme}/On/${c}/Background/Weak--${state}`;
     } else if (color === "bg") {
       return `${capitalizedTheme}/On/${c}/Background/${state}`;
     }
