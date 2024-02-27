@@ -92,28 +92,26 @@ const generateColorName = (theme, colorName) => {
   }
   const formattedCount = getFormattedCount(prefixOrder, prefix);
 
-  const componentName =
-    prefix === "On" ? prefix : `${formattedCount}--${capitalize(prefix)}`;
+  const componentName = `${formattedCount}--${capitalize(prefix)}`;
 
-  if (prefix.includes("On")) {
+  if (color.includes("On")) {
     const parts = colorName.split("/").slice(0);
-    const c = `${getFormattedCount(prefixOrder, parts[1])}--${capitalize(
-      parts[1]
-    )}`;
-
+    const on = parts[1];
     color = parts[2];
     if (parts.length > 2) {
       state = capitalizeState(parts[3]);
     }
-    if (parts[2].includes("01-Enabled")) {
+    if (parts[2].includes("01--Enabled")) {
       state = parts[2];
     }
     if (color === "bg-weak") {
-      return `${capitalizedTheme}/On/${c}/Background/Weak--${state}`;
+      return `${capitalizedTheme}/${componentName}/${on}/Background/Weak--${state}`;
     } else if (color === "bg") {
-      return `${capitalizedTheme}/On/${c}/Background/${state}`;
+      return `${capitalizedTheme}/${componentName}/${on}/Background/${state}`;
+    } else if (color === "contrast") {
+      return `${capitalizedTheme}/${componentName}/${on}/Contrast/${state}`;
     }
-    return `${capitalizedTheme}/On/${c}/${state}`;
+    return `${capitalizedTheme}/${componentName}/${on}/${state}`;
   }
   if (color.includes("bg")) {
     if (color === "bg-lvl-1") {
