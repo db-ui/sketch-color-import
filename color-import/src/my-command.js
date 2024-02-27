@@ -22,7 +22,6 @@ const expandHexColor = (hexColor) => {
   if (hexColor.length === 4 && hexColor[0] === "#") {
     const isShortHex = hexColor === "#fff" || hexColor === "#000";
     if (isShortHex) {
-      console.log(hexColor);
       return (
         hexColor[0] +
         hexColor[1].repeat(2) +
@@ -101,8 +100,8 @@ const generateColorName = (theme, colorName) => {
     if (parts.length > 2) {
       state = capitalizeState(parts[3]);
     }
-    if (parts[2].includes("01--Enabled")) {
-      state = parts[2];
+    if (parts[2].includes("01-Enabled")) {
+      state = capitalizeState(parts[2]);
     }
     if (color === "bg-weak") {
       return `${capitalizedTheme}/${componentName}/${on}/Background/Weak--${state}`;
