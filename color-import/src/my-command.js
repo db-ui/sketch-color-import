@@ -33,12 +33,12 @@ const expandHexColor = (hexColor) => {
   return hexColor;
 };
 const prefixOrder = {
-  brand: 1,
-  neutral: 2,
-  critical: 3,
-  informational: 4,
-  successful: 5,
-  warning: 6,
+  "db-brand": 1,
+  "db-neutral": 2,
+  "db-critical": 3,
+  "db-informational": 4,
+  "db-successful": 5,
+  "db-warning": 6,
 };
 
 const createSwatch = (document, name, hexColor, alpha) => {  
@@ -75,13 +75,11 @@ const generateColorName = (theme, colorName) => {
   let prefix, color, state;
   [prefix, color, state] = colorName.split("/");
 
-  const capitalizedTheme = capitalize(theme);
   const capitalizedColor = capitalize(color);
-  const capitalizedState = capitalizeState(state);
 
   function getFormattedCount(prefixOrder, prefix) {
     let count;
-    if (prefixOrder.hasOwnProperty(prefix)) {
+    if (prefixOrder.hasOwnProperty([prefix])) {
       count = prefixOrder[prefix];
     } else {
       count = Object.keys(prefixOrder).length + 1;
@@ -91,52 +89,43 @@ const generateColorName = (theme, colorName) => {
   }
   const formattedCount = getFormattedCount(prefixOrder, prefix);
 
-  const componentName = `${formattedCount}--${capitalize(prefix)}`;
+  const componentName = `${formattedCount}--${prefix}`;
 
-  if (color.includes("On")) {
+  if (color === "on") {
     const parts = colorName.split("/").slice(0);
     const on = parts[1];
     color = parts[2];
     if (parts.length > 2) {
-      state = capitalizeState(parts[3]);
+      state = parts[3];
     }
-    if (parts[2].includes("01-Enabled")) {
-      state = capitalizeState(parts[2]);
+    if (colorName === "db-brand/on/enabled") {
+      state = parts[2];
     }
     if (color === "bg-weak") {
-      return `${capitalizedTheme}/${componentName}/${on}/Background/Weak--${state}`;
-    } else if (color === "bg") {
-      return `${capitalizedTheme}/${componentName}/${on}/Background/${state}`;
-    } else if (color === "contrast") {
-      return `${capitalizedTheme}/${componentName}/${on}/Contrast/${state}`;
-    }
-    return `${capitalizedTheme}/${componentName}/${on}/${state}`;
+      return `${theme}/${componentName}/${on}/bg/weak-${state}`;
+    } else if (color === "bg" || color === "contrast") {
+      return `${theme}/${componentName}/${on}/${color}/${state}`;
+    } 
+    return `${theme}/${componentName}/${on}/${state}`;
   }
-  if (color.includes("bg")) {
-    if (color === "bg-lvl-1") {
-      return `${capitalizedTheme}/${componentName}/Background/Level-1--${capitalizedState}`;
-    } else if (color === "bg-lvl-2") {
-      return `${capitalizedTheme}/${componentName}/Background/Level-2--${capitalizedState}`;
-    } else if (color === "bg-lvl-3") {
-      return `${capitalizedTheme}/${componentName}/Background/Level-3--${capitalizedState}`;
-    } else if (color.includes("bg-transparent")) {
-      if (color === "bg-transparent-full") {
-        return `${capitalizedTheme}/${componentName}/Background-Transparent/Full--${capitalizedState}`;
-      } else {
-        return `${capitalizedTheme}/${componentName}/Background-Transparent/Semi--${capitalizedState}`;
-      }
+  
+  if (color.includes("bg-lvl-")) {
+    const extractedColor = color.split("bg-")[1];
+    return `${theme}/${componentName}/bg/${extractedColor}-${state}`;
+  } else if (color.includes("bg-transparent")) {
+    if (color === "bg-transparent-full") {
+      return `${theme}/${componentName}/bg-transparent/full-${state}`;
+    } else if (color === "bg-transparent-semi"){
+      return `${theme}/${componentName}/bg-transparent/semi-${state}`;
+    } else {
+      return `${theme}/${componentName}/bg-transparent/${state}`;
     }
   }
-  if (color.includes("contrast")) {
-    if (color === "contrast-high") {
-      return `${capitalizedTheme}/${componentName}/Contrast-High/${capitalizedState}`;
-    }
-    if (color === "contrast-low") {
-      return `${capitalizedTheme}/${componentName}/Contrast-Low/${capitalizedState}`;
-    }
+  
+  if (!state) {
+    return `${theme}/${componentName}/${color}`;
   }
-
-  return `${capitalizedTheme}/${componentName}/${capitalizedColor}/${capitalizedState}`;
+  return `${theme}/${componentName}/${color}/${state}`;
 };
 
 const createArtboard = (
@@ -185,7 +174,7 @@ const importThemes = async () => {
     const response = await sketch.UI.getInputFromUser(
       "Select themes to import (Light/Dark/Both):",
       {
-        initialValue: "Both",
+        initialValue: "Light",
       },
       async (err, value) => {
         if (err) {
@@ -208,7 +197,7 @@ const importThemes = async () => {
             const alpha = 1 - transparencyPercentage / 100;
 
             const newNames = generateColorName(theme, colorName);
-
+            //console.log(newNames);
             createSwatch(document, newNames, hexValue, alpha);
           }
         };
