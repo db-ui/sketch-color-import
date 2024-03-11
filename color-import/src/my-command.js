@@ -98,15 +98,11 @@ const generateColorName = (theme, colorName) => {
     if (parts.length > 2) {
       state = parts[3];
     }
-    if (colorName === "db-brand/on/enabled") {
-      state = parts[2];
-    }
+    
     if (color === "bg-weak") {
       return `${theme}/${componentName}/${on}/bg/weak-${state}`;
-    } else if (color === "bg" || color === "contrast") {
-      return `${theme}/${componentName}/${on}/${color}/${state}`;
     } 
-    return `${theme}/${componentName}/${on}/${state}`;
+    return `${theme}/${componentName}/${on}/${color}/${state}`;
   }
   
   if (color.includes("bg-lvl-")) {
@@ -197,7 +193,6 @@ const importThemes = async () => {
             const alpha = 1 - transparencyPercentage / 100;
 
             const newNames = generateColorName(theme, colorName);
-            //console.log(newNames);
             createSwatch(document, newNames, hexValue, alpha);
           }
         };
