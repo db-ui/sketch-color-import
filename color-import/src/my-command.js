@@ -110,9 +110,9 @@ const generateColorName = (theme, colorName) => {
     return `${theme}/${componentName}/bg/${extractedColor}-${state}`;
   } else if (color.includes("bg-transparent")) {
     if (color === "bg-transparent-full") {
-      return `${theme}/${componentName}/bg-transparent/full-${state}`;
+      return `${theme}/${componentName}/bg-transparent/01--full-${state}`;
     } else if (color === "bg-transparent-semi"){
-      return `${theme}/${componentName}/bg-transparent/semi-${state}`;
+      return `${theme}/${componentName}/bg-transparent/02--semi-${state}`;
     } else {
       return `${theme}/${componentName}/bg-transparent/${state}`;
     }
