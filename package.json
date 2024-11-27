@@ -1,0 +1,17 @@
+{
+  "name": "sketch-color-import",
+  "private": true,
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/db-ui/sketch-color-import"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "9.1.7"
+  }
+}
